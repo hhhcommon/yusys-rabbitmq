@@ -1,4 +1,4 @@
-package cn.com.yusys.rabbitmq.simple;
+package cn.com.yusys.rabbitmq.work;
 
 
 import cn.com.yusys.rabbitmq.util.ConnectionUtil;
@@ -13,7 +13,7 @@ import com.rabbitmq.client.Connection;
  */
 public class Producer {
 
-    static final String QUEUE_NAME = "simple_queue";
+    static final String QUEUE_NAME = "work_queue";
 
     public static void main(String[] args) throws Exception {
 
@@ -34,16 +34,17 @@ public class Producer {
         channel.queueDeclare(QUEUE_NAME, true, false, false, null);
 
         // 要发送的消息
-        String messsage = "哈哈，欢迎使用rabbitMq!";
-        /**
-         * 参数一：交换机名称，如果没有指定则使用默认Default Exchange
-         * 参数二：路由key，简单模式可以传递队列名称
-         * 参数三：消息其他属性
-         * 参数四：消息内容
-         */
-        channel.basicPublish("", QUEUE_NAME, null, messsage.getBytes());
-        System.out.println("已经发送消息： " + messsage);
-
+        for (int i = 0; i < 30; i++) {
+            String messsage = "哈哈，欢迎使用rabbitMq--work_queue-----" + i;
+            /**
+             * 参数一：交换机名称，如果没有指定则使用默认Default Exchange
+             * 参数二：路由key，简单模式可以传递队列名称
+             * 参数三：消息其他属性
+             * 参数四：消息内容
+             */
+            channel.basicPublish("", QUEUE_NAME, null, messsage.getBytes());
+            System.out.println("已经发送消息： " + messsage);
+        }
         // 释放资源
         channel.close();
         connection.close();
